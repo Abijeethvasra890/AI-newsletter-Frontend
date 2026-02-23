@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        from: "onboarding@vasra.ai", // TEMP test email
+        from: "onboarding@resend.dev",
         to: email,
         subject: "Welcome to The Vasra's AI Digest 🚀",
         html: `
