@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Weekly Newsletter</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="bg-gradient-to-br from-black via-gray-950 to-gray-900 text-white min-h-screen flex items-center justify-center px-6">
+
+  <div class="max-w-3xl text-center">
+
+    <!-- Brand Badge -->
+    <div class="mb-6">
+      <span class="px-4 py-2 bg-blue-600/20 text-blue-400 rounded-full text-sm tracking-wide">
+        🤖 Powered by Agent Vasra
+      </span>
+    </div>
+
+    <!-- Main Title -->
+    <h1 class="text-5xl sm:text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+      The Vasra's AI Digest
+    </h1>
+
+    <!-- Tagline -->
+    <p class="text-xl text-gray-300 mb-4">
+      Agent Vasra reporting in.
+    </p>
+
+    <p class="text-gray-400 text-lg mb-10">
+      Serving you the freshest AI breakthroughs, dev tools, 
+      jaw-dropping launches, and startup-grade insights —
+      minus the hype, minus the LinkedIn cringe.
+      <br><br>
+      Just clean signal. No noise. No fluff.
+    </p>
+
+    <!-- Card -->
+    <div class="bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl p-10 shadow-2xl">
+
+      <form id="subscribe-form" class="flex flex-col sm:flex-row gap-4 justify-center">
+        <input
+          type="email"
+          id="email"
+          required
+          placeholder="Enter your email (future AI legend)"
+          class="px-5 py-3 rounded-xl text-black w-full sm:w-80 focus:outline-none"
+        />
+
+        <button
+          type="submit"
+          id="subscribe-btn"
+          class="bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 px-8 py-3 rounded-xl font-semibold transition duration-300"
+        >
+          Join The Signal 🚀
+        </button>
+      </form>
+
+      <p id="message" class="mt-5 text-sm"></p>
+
+      <p class="text-gray-500 text-xs mt-6">
+        Free forever • Zero spam • Unsubscribe anytime
+      </p>
+
+    </div>
+
+    <!-- Bottom Humor -->
+    <p class="text-gray-600 text-sm mt-10 italic">
+      If it's trending in AI, Agent Vasra already read it.
+      You just get the distilled version.
+    </p>
+
+  </div>
+
+ <script>
+  const supabaseClient = window.supabase.createClient(
+    "https://mcriurcvyhvysfmimvcp.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcml1cmN2eWh2eXNmbWltdmNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MzM3NjUsImV4cCI6MjA4NzMwOTc2NX0.Zo4LC1OJK67puuwtwmtyvGaJ6tJ0qw7Bf5VythkFcGQ"
+  );
+
+  const form = document.getElementById("subscribe-form");
+  const message = document.getElementById("message");
+  const button = document.getElementById("subscribe-btn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    button.disabled = true;
+    button.innerText = "Subscribing...";
+
+    const { error } = await supabaseClient
+      .from("subscribers")
+      .insert([
+        {
+          email: email,
+          is_active: true,
+          interests: []
+        }
+      ]);
+
+    if (error) {
+      if (error.code === "23505") {
+        message.innerText = "You're already subscribed 🚀";
+      } else {
+        message.innerText = error.message;
+      }
+      message.className = "mt-4 text-red-400";
+    } else {
+      message.innerText = "You're subscribed! 🎉";
+      message.className = "mt-4 text-green-400";
+      form.reset();
+    }
+
+    button.disabled = false;
+    button.innerText = "Subscribe";
+  });
+</script>
+
+</body>
+</html>
